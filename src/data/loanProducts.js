@@ -20,13 +20,13 @@ export const indianLoanProducts = [
         processingFee: "Up to 2.5%"
     },
     {
-        id: 'icici-auto',
-        provider: "ICICI Auto Loan",
-        type: "Auto",
-        minRate: 8.75,
-        maxRate: 11.00,
+        id: 'sbi-education',
+        provider: "SBI Education Loan",
+        type: "Education",
+        minRate: 8.50,
+        maxRate: 10.50,
         minTenure: 1,
-        maxTenure: 7,
-        processingFee: "Fixed ₹3,500"
+        maxTenure: 15,
+        processingFee: "Nil for < 20 Lakhs"
     }
 ];

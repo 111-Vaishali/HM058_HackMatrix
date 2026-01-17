@@ -11,7 +11,7 @@
   --text-muted: #94a3b8;
   --border-glass: rgba(255, 255, 255, 0.1);
   --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  
+
   --font-family: 'Outfit', sans-serif;
 }
 
@@ -21,13 +21,43 @@
   padding: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-main);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
 body {
   font-family: var(--font-family);
   background-color: var(--bg-dark);
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: 
+  background-image:
     radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
 }
@@ -88,7 +118,8 @@ button {
 }
 
 /* Forms */
-input, select {
+input,
+select {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--border-glass);
   color: var(--text-main);
@@ -100,7 +131,15 @@ input, select {
   transition: border-color 0.3s;
 }
 
-input:focus, select:focus {
+select option {
+  background-color: #0f172a;
+  /* Hardcoded dark to ensure opacity */
+  color: var(--text-main);
+  padding: 10px;
+}
+
+input:focus,
+select:focus {
   outline: none;
   border-color: var(--primary);
 }
@@ -114,8 +153,15 @@ label {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {

@@ -6,8 +6,15 @@ export const FinancialProvider = ({ children }) => {
     const [financialData, setFinancialData] = useState({
         income: '',
         expenses: '',
-        debt: '',
-        creditScore: ''
+        debt: '', // Kept for backward compatibility, represents total existing debt
+        loanAmount: '',
+        loanTenure: '',
+        loanType: 'HOME', // Default
+        employmentType: 'Salaried',
+        age: '',
+        creditScore: '',
+        creditHistory: [], // Stores mock history objects { month: 'Jan', score: 750, reason: '...' }
+        eligibilityResult: null // Store calculated result here
     });
 
     const updateFinancialData = (newData) => {

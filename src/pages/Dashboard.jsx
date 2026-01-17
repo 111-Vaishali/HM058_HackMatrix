@@ -6,61 +6,104 @@ import { formatINR } from '../utils/formatters';
 const Dashboard = () => {
     const { financialData } = useFinancial();
 
-    // Parse values or default to 0
-    const score = parseInt(financialData.creditScore) || 700; // Default mock if empty
-    const income = parseFloat(financialData.income) || 5000;
-    const debt = parseFloat(financialData.debt) || 1000;
+    // Parse values
+    const income = parseFloat(financialData.income) || 0;
+    const expenses = parseFloat(financialData.expenses) || 0;
+    const disposable = Math.max(income - expenses, 0);
+    const loanAmount = parseFloat(financialData.loanAmount) || 0;
+    const tenure = parseFloat(financialData.loanTenure) || 0;
 
-    // Simple calc
-    const dti = income > 0 ? Math.round((debt / income) * 100) : 0;
-    const debtToIncome = dti;
-    const creditScore = score;
-
+    // Simple textual recommendations based on financial health
     const recommendations = [];
-    if (dti > 30) recommendations.push("Reduce debt to lower your DTI ratio below 30%");
-    if (score < 700) recommendations.push("Review credit report for errors");
-    if (score >= 700) recommendations.push("Maintain current timely payment streak");
-    if (recommendations.length === 0) recommendations.push("Great financial health! Keep it up.");
+    if (disposable < (income * 0.2)) recommendations.push("Your disposable income is low. Consider reducing expenses.");
+    if (loanAmount > (income * 20)) recommendations.push("Loan amount seems high compared to typical eligibility (20x monthly income).");
+    if (disposable > 0 && loanAmount > 0) recommendations.push("You have a healthy surplus to service a loan.");
+    if (recommendations.length === 0) recommendations.push("Great financial profile! You are likely eligible for various offers.");
 
-    const scoreColor = score >= 700 ? '#4ade80' : score >= 600 ? '#facc15' : '#f87171';
-    const scoreText = score >= 700 ? 'Good' : score >= 600 ? 'Fair' : 'Needs Work';
-    const dtiColor = dti < 30 ? 'var(--secondary)' : 'var(--accent)';
-    const dtiText = dti < 30 ? 'Healthy' : 'High';
+    const StatCard = ({ title, value, subtext, color }) => (
+        <div className="glass" style={{ padding: '1.5rem', borderRadius: '1rem', textAlign: 'center' }}>
+            <h3 style={{ marginBottom: '0.5rem', color: 'var(--text-muted)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</h3>
+            <div style={{ fontSize: '1.8rem', fontWeight: '700', color: color || 'var(--text-main)', marginBottom: '0.25rem' }}>
+                {value}
+            </div>
+            {subtext && <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{subtext}</div>}
+        </div>
+    );
 
     return (
         <div className="container animate-fade-in" style={{ paddingTop: '3rem' }}>
-            <h2 style={{ marginBottom: '2rem' }}>Financial Dashboard</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <h2 style={{ margin: 0 }}>Financial Dashboard</h2>
+                <Link to="/financial-form" className="btn btn-secondary" style={{ fontSize: '0.9rem' }}>Edit Profile</Link>
+            </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
-                {/* Credit Score Card */}
-                <div className="glass" style={{ padding: '2rem', borderRadius: '1rem', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-                    <div style={{
-                        position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px',
-                        background: 'var(--primary)', filter: 'blur(50px)', opacity: '0.2', borderRadius: '50%'
-                    }}></div>
-                    <h3 style={{ marginBottom: '1rem', color: 'var(--text-muted)' }}>Credit Score</h3>
-                    <div style={{ fontSize: '4rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-                        {creditScore}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+                <StatCard title="Monthly Income" value={formatINR(income)} />
+                <StatCard title="Monthly Expenses" value={formatINR(expenses)} />
+                <StatCard
+                    title="Disposable Income"
+                    value={formatINR(disposable)}
+                    color={disposable > 0 ? '#4ade80' : 'var(--accent)'}
+                />
+            </div>
+
+            {financialData.eligibilityResult && (
+                <div className="glass" style={{ padding: '2rem', borderRadius: '1rem', marginBottom: '3rem', border: financialData.eligibilityResult.isEligible ? '1px solid #4ade80' : '1px solid var(--accent)' }}>
+                    <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        Eligibility Status:
+                        <span style={{ color: financialData.eligibilityResult.isEligible ? '#4ade80' : 'var(--accent)', textTransform: 'uppercase' }}>
+                            {financialData.eligibilityResult.isEligible ? 'Eligible' : 'Not Eligible'}
+                        </span>
+                    </h3>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '1.5rem' }}>
+                        <div>
+                            <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Projected EMI</div>
+                            <div style={{ fontSize: '1.8rem', fontWeight: '700' }}>{formatINR(financialData.eligibilityResult.emi)}</div>
+                        </div>
+                        <div>
+                            <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Base Interest Rate</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: '600' }}>{financialData.eligibilityResult.rate}%</div>
+                        </div>
+                        <div>
+                            <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Loan Type</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: '600' }}>{financialData.eligibilityResult.loanType}</div>
+                        </div>
                     </div>
-                    <div style={{ color: scoreColor, fontWeight: '500' }}>{scoreText}</div>
-                    <div style={{ marginTop: '1rem', height: '10px', width: '100%', background: 'rgba(255,255,255,0.1)', borderRadius: '5px' }}>
-                        <div style={{ height: '100%', width: `${Math.min(Math.max((score - 300) / 5.5, 0), 100)}%`, background: 'linear-gradient(90deg, var(--secondary), var(--primary))', borderRadius: '5px' }}></div>
-                    </div>
+
+                    {!financialData.eligibilityResult.isEligible && (
+                        <div style={{ background: 'rgba(239, 68, 68, 0.1)', padding: '1rem', borderRadius: '0.5rem' }}>
+                            <h4 style={{ color: 'var(--accent)', marginBottom: '0.5rem' }}>Reasons for Ineligibility:</h4>
+                            <ul style={{ paddingLeft: '1.5rem', color: 'var(--text-muted)' }}>
+                                {financialData.eligibilityResult.reasons.map((reason, idx) => (
+                                    <li key={idx} style={{ marginBottom: '0.25rem' }}>{reason}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
+            )}
 
-                {/* DTI Card */}
-                <div className="glass" style={{ padding: '2rem', borderRadius: '1rem', textAlign: 'center' }}>
-                    <h3 style={{ marginBottom: '1rem', color: 'var(--text-muted)' }}>Debt-to-Income Ratio</h3>
-                    <div style={{ fontSize: '4rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-                        {debtToIncome}%
+            <div className="glass" style={{ padding: '2rem', borderRadius: '1rem', marginBottom: '3rem' }}>
+                <h3 style={{ marginBottom: '1.5rem' }}>Loan Request Details</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
+                    <div>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Desired Amount</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600' }}>{formatINR(loanAmount)}</div>
                     </div>
-                    <div style={{ color: dtiColor, fontWeight: '500' }}>{dtiText}</div>
-                    <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>Target: &lt; 30%</p>
+                    <div>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Preferred Tenure</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600' }}>{tenure} Years</div>
+                    </div>
+                    <div>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Employment</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600' }}>{financialData.employmentType || 'Standard'}</div>
+                    </div>
                 </div>
             </div>
 
             <div className="glass" style={{ padding: '2rem', borderRadius: '1rem' }}>
-                <h3 style={{ marginBottom: '1.5rem' }}>AI Recommendations</h3>
+                <h3 style={{ marginBottom: '1.5rem' }}>AI Insights</h3>
                 <ul style={{ listStyle: 'none' }}>
                     {recommendations.map((rec, index) => (
                         <li key={index} style={{
@@ -73,8 +116,9 @@ const Dashboard = () => {
                         </li>
                     ))}
                 </ul>
-                <div style={{ marginTop: '2rem', textAlign: 'right' }}>
-                    <Link to="/loans" className="btn btn-primary">See Loan Offers</Link>
+                <div style={{ marginTop: '2rem', textAlign: 'right', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                    <Link to="/credit-score" className="btn btn-secondary">Track Credit Score</Link>
+                    <Link to="/loans" className="btn btn-primary">Check Eligibility</Link>
                 </div>
             </div>
         </div>

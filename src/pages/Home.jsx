@@ -15,19 +15,21 @@ const Home = () => {
                 <Link to="/dashboard" className="btn btn-secondary">View Demo Dashboard</Link>
             </div>
 
-            <div style={{ marginTop: '5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-                <div className="glass" style={{ padding: '2rem', borderRadius: '1rem' }}>
-                    <h3 style={{ marginBottom: '1rem', color: 'var(--secondary)' }}>Real-time Analysis</h3>
-                    <p style={{ color: 'var(--text-muted)' }}>Get instant feedback on your financial health based on your latest data.</p>
-                </div>
-                <div className="glass" style={{ padding: '2rem', borderRadius: '1rem' }}>
-                    <h3 style={{ marginBottom: '1rem', color: 'var(--accent)' }}>Smart Recommendations</h3>
-                    <p style={{ color: 'var(--text-muted)' }}>AI-driven suggestions to improve your credit score and reduce debt.</p>
-                </div>
-                <div className="glass" style={{ padding: '2rem', borderRadius: '1rem' }}>
-                    <h3 style={{ marginBottom: '1rem', color: 'var(--primary)' }}>Loan Comparison</h3>
-                    <p style={{ color: 'var(--text-muted)' }}>Compare interest rates and terms from top lenders in one place.</p>
-                </div>
+            <div style={{ marginTop: '5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', textAlign: 'left' }}>
+                {[
+                    { title: "Financial Profile Builder", desc: "Build a comprehensive financial identity with income and expense tracking.", icon: "📋", color: "var(--primary)" },
+                    { title: "Loan Eligibility Check", desc: "Instant eligibility assessments for Home, Personal, and Education loans.", icon: "✅", color: "var(--secondary)" },
+                    { title: "EMI Calculator", desc: "Precise EMI calculations using current Indian market interest rates.", icon: "🧮", color: "var(--accent)" },
+                    { title: "Loan Comparison Dashboard", desc: "Compare multiple loan offers side-by-side to find the best deal.", icon: "⚖️", color: "#facc15" },
+                    { title: "Credit Score Tracking", desc: "Monitor your credit health simulations and view detailed history.", icon: "📈", color: "#4ade80" },
+                    { title: "Smart Financial Insights", desc: "AI-driven recommendations to optimize your debt and savings.", icon: "💡", color: "#8b5cf6" }
+                ].map((feature, idx) => (
+                    <div key={idx} className="glass" style={{ padding: '2rem', borderRadius: '1rem', transition: 'transform 0.3s ease' }}>
+                        <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{feature.icon}</div>
+                        <h3 style={{ marginBottom: '1rem', color: feature.color }}>{feature.title}</h3>
+                        <p style={{ color: 'var(--text-muted)' }}>{feature.desc}</p>
+                    </div>
+                ))}
             </div>
         </div>
     );
