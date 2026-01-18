@@ -84,4 +84,28 @@ https://drive.google.com/drive/folders/1CriURIdW1IEogPmLDmGgoKOXTIQdTlMr
 ![EMI Calculator](screenshots/emi-calculator.png)
 ![Credit Score Tracker](screenshots/credit-score.png)
 
+👨‍💻 Our Team
+Vaishali G. Sunepwar
+📧 vaishali.sunepwar24@pccoe.pune
+🔗 *[GitHub](https://github.com/111-Vaishali)*
+
+Mokshada Kotalwar
+📧 mokshada.kotalwar24@pccoepune.org
+🔗 *[GitHub](https://github.com/MokshdaKotalwar))*
+
+Shruti Konkatwar
+📧 shruti.konkatwar24@pccoepune.org
+🔗 *[GitHub](https://github.com/shrutikonkatwar-2028)*
+
+Payal Ghatage
+📧 payalghatage24@pccoepune.org
+🔗 *[GitHub](https://github.com/payalghatage2345)*
+
+
+ 
+
+
+
+🚀 Thank You for Using MEDILOG!
+We hope this project enhances hospital efficiency and improves patient care. 💙
 
