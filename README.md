@@ -89,8 +89,8 @@ Vaishali G. Sunepwar
 📧 vaishali.sunepwar24@pccoe.pune
 🔗 *[GitHub](https://github.com/111-Vaishali)*
 
-Mokshada Kotalwar
-📧 mokshada.kotalwar24@pccoepune.org
+Mokshda Kotalwar
+📧 mokshda.kotalwar24@pccoepune.org
 🔗 *[GitHub](https://github.com/MokshdaKotalwar))*
 
 Shruti Konkatwar
